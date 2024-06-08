@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+<form method="get">
+    <input type="text" name="q" placeholder="Search by license plate">
+    <button type="submit">Search</button>
+</form>
+
+{% if car %}
+<h1>{{ car.license_plate }}</h1>
+<p>Uploaded by: {{ car.uploaded_by.phone_number }}</p>
+<ul>
+    {% for image in car.images %}
+    <li><img src="{{ image }}" alt="Car Image"></li>
+    {% endfor %}
+</ul>
+<a href="{% url 'download_images' car.id %}">Download all images</a>
+{% elif car is not None %}
+<p>No car found.</p>
+{% endif %}
+</body>
+</html>
