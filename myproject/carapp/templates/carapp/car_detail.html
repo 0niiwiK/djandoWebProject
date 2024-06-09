@@ -1,12 +1,204 @@
-{% if car %}
-<h1>{{ car.license_plate }}</h1>
-<p>Uploaded by: {{ car.uploaded_by.phone_number }}</p>
-<ul>
-  {% for image in car.images %}
-  <li><img src="{{ image }}" alt="Car Image"></li>
-  {% endfor %}
-</ul>
-<a href="{% url 'download_images' car.id %}">Download all images</a>
-{% else %}
-<p>No car found.</p>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ car.license_plate }} Details</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+        .container {
+            display: inline;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: auto;
+            max-width: 80%;
+            position: relative;
+        }
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+        }
+        .header-container h1 {
+            font-size: 4em;
+            margin: 0;
+        }
+        .license-plate {
+            display: inline-block;
+            padding: 10px 80px;
+            background-image: url('/static/images/european_plate.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: black;
+            font-weight: bold;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .back-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .back-button:hover {
+            background-color: #d32f2f;
+        }
+        .back-button .arrow {
+            margin-right: 8px;
+        }
+        .center {
+            display: inline;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .center button {
+            padding: 15px 60px;
+            font-size: 20px;
+            background-color: #007aff;
+            width: 100%;
+            color: white;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .center button:hover {
+            background-color: #005bb5;
+        }
+
+        .grid-container {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            grid-auto-flow: dense;
+        }
+        .grid-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .grid-item img:hover {
+            transform: scale(1.1);
+        }
+        .toggle-button {
+            display: inline;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .toggle-button button {
+            padding: 15px 60px;
+            font-size: 20px;
+            background-color: #ff9100;
+            color: white;
+            width: 100%;
+            border: none;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .toggle-button button:hover {
+            background-color: #935400;
+        }
+        @media (max-width: 600px) {
+            .header-container h1 {
+                font-size: 2em;
+            }
+            .center button,
+            .toggle-button button,
+            .back-button {
+                padding: 10px 40px;
+                font-size: 16px;
+            }
+            .license-plate {
+                padding: 20px 80px;
+                font-size: 1em;
+            }
+            .back-button {
+                padding: 10px;
+                font-size: 24px;
+            }
+            .back-button .arrow {
+                display: inline;
+            }
+            .back-button span {
+                display: none;
+            }
+        }
+    </style>
+    <script>
+        function toggleGrid() {
+            var grid = document.getElementById('image-grid');
+            if (grid.style.display === 'none' || grid.style.display === '') {
+                grid.style.display = 'grid';
+            } else {
+                grid.style.display = 'none';
+            }
+        }
+
+        function showAlertAndRedirect() {
+            alert('No car found.');
+            window.location.href = '/search/';
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    {% if car %}
+        <div class="header-container">
+            <h1><div class="license-plate">{{ car.license_plate }}</div></h1>
+        </div>
+        <div class="center">
+            <a href="{% url 'download_images' car.id %}">
+                <button>Download all images</button>
+            </a>
+        </div>
+        <div class="toggle-button">
+            <button onclick="toggleGrid()">Show/Hide Images</button>
+        </div>
+        <div id="image-grid" class="grid-container">
+            {% for image in car.images.all %}
+                <div class="grid-item">
+                    <a href="{{ image.image.url }}" download>
+                        <img src="{{ image.image.url }}" alt="Car Image">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <script>
+            showAlertAndRedirect();
+        </script>
+    {% endif %}
+</div>
+</body>
+</html>

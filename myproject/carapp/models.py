@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.db import models
+from django.urls import reverse
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, phone_number, password=None, **extra_fields):
@@ -33,10 +34,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 
-class Car(models.Model):
-    license_plate = models.CharField(max_length=15, unique=True)
-    uploaded_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    images = models.JSONField()  # Almacena la lista de imágenes como JSON
+from django.db import models
 
-    def __str__(self):
-        return self.license_plate
+class Car(models.Model):
+    license_plate = models.CharField(max_length=20)
+    uploaded_by = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse('car_detail', args=[self.id])
+
+class CarImage(models.Model):
+    car = models.ForeignKey(Car, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='car_images/')
