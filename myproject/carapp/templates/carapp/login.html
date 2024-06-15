@@ -152,8 +152,14 @@
             }
 
             .modal-content {
-                width: 90%;
-                max-width: 90%;
+                width: 60%;
+                max-width: 60%;
+            }
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 48px;
+                font-weight: bold;
             }
         }
     </style>
@@ -173,7 +179,7 @@
 </div>
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
+<div id="acercaDeModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Diseñado por</h2>
@@ -187,7 +193,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
         // Get the modal
-        var modal = document.getElementById("myModal");
+        var modal = document.getElementById("acercaDeModal");
 
         // Get the button that opens the modal
         var btn = document.getElementById("acercade");
