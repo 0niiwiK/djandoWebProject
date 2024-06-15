@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*5l!nql75efugb9^x)^@*tyrk*vyfrfg2x4621kc&d&cyzof@b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -37,7 +37,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
 ]
+
+# Configuraciones para DigitalOcean Spaces
+AWS_ACCESS_KEY_ID = 'DO00FVHPCXV8YW46L3X7'
+AWS_SECRET_ACCESS_KEY = 'fI41WPcQLxmpoJhIFVbpHHPm8pltkqWw3clhpHqHYpc'
+AWS_STORAGE_BUCKET_NAME = 'kiwiin0carimages'
+AWS_S3_ENDPOINT_URL = 'https://kiwiin0carimages.fra1.digitaloceanspaces.com' #@NeoN2189k
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_ENDPOINT_URL.split("://")[1]}'
+
+# Configuración de archivos estáticos
+STATIC_LOCATION = 'static'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Configuración de archivos medios
+MEDIA_LOCATION = 'media'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
