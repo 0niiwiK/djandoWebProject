@@ -29,7 +29,7 @@
             max-width: 300px;
         }
         .container h1 {
-            font-size: 36px;
+            font-size: 42px;
             margin-bottom: 20px;
         }
         .login-container {
@@ -125,6 +125,36 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                max-width: 80%;
+            }
+
+            .container h1 {
+                font-size: 32px;
+            }
+
+            .login-container input[type="text"], .login-container input[type="password"] {
+                padding: 20px 0px;
+                font-size: 18px;
+            }
+
+            .login-container button {
+                padding: 20px 15px;
+                font-size: 28px;
+            }
+
+            #acercade {
+                padding: 12px 15px;
+                font-size: 20px;
+            }
+
+            .modal-content {
+                width: 90%;
+                max-width: 90%;
+            }
     </style>
 </head>
 <body>
