@@ -25,7 +25,21 @@ class CarSerializer(serializers.ModelSerializer):
         images_data = validated_data.pop('images')
         phone_number = validated_data.pop('phone_number')
         user = CustomUser.objects.get(phone_number=phone_number)
-        car = Car.objects.create(uploaded_by=user, **validated_data)
-        for image_data in images_data:
-            CarImage.objects.create(car=car, image=image_data)
+
+        # Intentar obtener el coche existente
+        car, created = Car.objects.update_or_create(
+            license_plate=validated_data['license_plate'],
+            defaults={'uploaded_by': user}
+        )
+
+        # Si el coche es nuevo, agregar las imágenes
+        if created:
+            for image_data in images_data:
+                CarImage.objects.create(car=car, image=image_data)
+        else:
+            # Si el coche ya existía, actualizar las imágenes
+            car.images.all().delete()
+            for image_data in images_data:
+                CarImage.objects.create(car=car, image=image_data)
+
         return car
