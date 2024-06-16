@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'carapp',
     'rest_framework',
+    'carapp',
 ]
 
 REST_FRAMEWORK = {

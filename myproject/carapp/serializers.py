@@ -8,13 +8,18 @@ class CarImageSerializer(serializers.ModelSerializer):
 
 class CarSerializer(serializers.ModelSerializer):
     images = serializers.ListField(
-        child=serializers.ImageField(max_length=1000000, allow_empty_file=False, use_url=False)
+        child=serializers.ImageField(max_length=1000000, allow_empty_file=False, use_url=False),
+        write_only=True
     )
     phone_number = serializers.CharField(write_only=True)
+    uploaded_images = serializers.SerializerMethodField()
 
     class Meta:
         model = Car
-        fields = ['license_plate', 'phone_number', 'images']
+        fields = ['license_plate', 'phone_number', 'images', 'uploaded_images']
+
+    def get_uploaded_images(self, obj):
+        return CarImageSerializer(obj.images.all(), many=True).data
 
     def create(self, validated_data):
         images_data = validated_data.pop('images')
