@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 import logging
 
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -57,6 +58,7 @@ from rest_framework import status
 from .serializers import CarSerializer
 
 
+@csrf_exempt
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
 def add_car_api(request):
