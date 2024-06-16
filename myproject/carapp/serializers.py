@@ -21,6 +21,6 @@ class CarSerializer(serializers.ModelSerializer):
         phone_number = validated_data.pop('phone_number')
         user = CustomUser.objects.get(phone_number=phone_number)
         car = Car.objects.create(uploaded_by=user, **validated_data)
-        for image_data in images_data.all():
+        for image_data in images_data:
             CarImage.objects.create(car=car, image=image_data)
         return car
