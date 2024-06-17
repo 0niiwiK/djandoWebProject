@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.urls import reverse
 
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, phone_number, password=None, **extra_fields):
         if not phone_number:
@@ -15,6 +16,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(phone_number, password, **extra_fields)
+
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=15, unique=True)
@@ -33,15 +35,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.phone_number
 
 
-
-from django.db import models
-
 class Car(models.Model):
     license_plate = models.CharField(max_length=20)
     uploaded_by = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse('car_detail', args=[self.id])
+
 
 class CarImage(models.Model):
     car = models.ForeignKey(Car, related_name='images', on_delete=models.CASCADE)
