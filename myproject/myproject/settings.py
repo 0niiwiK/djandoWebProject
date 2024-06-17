@@ -104,6 +104,26 @@ DATABASES = {
     }
 }
 
+DATABASES = {
+
+    'default': {
+
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        'NAME': 'djangodb',
+
+        'USER': 'kiwii',
+
+        'PASSWORD': 'ride1234',
+
+        'HOST': 'localhost',
+
+        'PORT': '5432',
+
+    }
+
+}
+
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'search'
 LOGOUT_REDIRECT_URL = 'login'
