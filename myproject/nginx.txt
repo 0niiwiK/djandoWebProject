@@ -1,0 +1,39 @@
+server {
+    listen 443 ssl;
+    server_name 161.35.23.100 car.gardenfuture.club www.car.gardenfuture.club;
+    
+    ssl_certificate /etc/letsencrypt/live/car.gardenfuture.club/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/car.gardenfuture.club/privkey.pem; # managed by Certbot
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;    
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+        alias /home/kiwii/djandoWebProject/myproject/static/;
+
+    client_max_body_size 1024M;
+
+    }
+
+    location /media/ {
+        alias /home/kiwii/djandoWebProject/myproject/media/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;
+    }
+
+}
+server {
+    if ($host = car.gardenfuture.club) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name 161.35.23.100 car.gardenfuture.club;
+    return 404; # managed by Certbot
+}
